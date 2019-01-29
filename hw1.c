@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     printf("[STEP 3] Select cache mapping function (CMF)\n");
     printf("------------------------\n");
     printf("1 = Direct mapping\n");
-    printf("2 = Fully associative\n");
+    printf("2 = Set associative\n");
     printf("------------------------\n");
     printf("Please enter 1 or 2: ");
 
