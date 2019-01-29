@@ -42,10 +42,14 @@ int initializeCache(unsigned int number_of_lines)
 int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
 	  unsigned int* replace)
 {
-  /* TODO: You complete
+  /* TODO: You complete */
 
-
-   */
+  switch (cmf) {
+      case 1:
+        // Direct Mapping
+      case 2:
+        // Set Associative
+  }
 
   // this is simply put here so the code complies, you must code correctly.
   int retVal = OK;
