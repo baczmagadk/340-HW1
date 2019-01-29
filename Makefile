@@ -1,4 +1,4 @@
-CC=gcc
+CC=/usr/bin/cc
 CFLAGS=-c -Wall -g #-std=c11
 SRCS=memory.c cache.c hw1.c
 OBJS=memory.o cache.o hw1.o

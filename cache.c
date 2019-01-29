@@ -49,8 +49,10 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
   switch (cmf) {
       case 1:
         // Direct Mapping
+        break;
       case 2:
         // Set Associative
+        break;
       default:
         retVal = FAIL;
   }
