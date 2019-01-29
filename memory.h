@@ -67,7 +67,7 @@ int numberOfBlocks(unsigned int addr_bits, unsigned int num_block_offset_bits);
 
 // ------------------------------------
 // Function prototype that identifies the 
-// starting physcial memory address location 
+// starting physcial memory address location
 // for each block.
 // 
 //

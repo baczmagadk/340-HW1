@@ -64,10 +64,10 @@ unsigned int readMemoryFile(char* file_name) {
 
 int numberOfBlocks(unsigned int addr_bits, unsigned int num_block_offset_bits)
 {
-  /* TODO: You complete code
+  /* TODO: You complete code */
 
 
-   */
+
 
   // this is simply put here so the code complies, you must code correctly.
   return 0; 
