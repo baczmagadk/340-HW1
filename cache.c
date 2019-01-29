@@ -49,6 +49,8 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
         // Direct Mapping
       case 2:
         // Set Associative
+      default:
+        // Error
   }
 
   // this is simply put here so the code complies, you must code correctly.
