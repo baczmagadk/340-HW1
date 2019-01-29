@@ -24,8 +24,8 @@
 
 // Simulator parameters
 #define NUM_OF_LINE_BITS 3
-#define NUM_OF_TAG_BITS_DM 3;
-#define NUM_OF_TAG_BITS_SA 6
+#define NUM_OF_TAG_BITS_DM 3
+#define NUM_OF_TAG_BITS_SA 4
 #define NUM_OF_LINES 8
 
 #define HIT 1

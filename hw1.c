@@ -25,14 +25,14 @@ This will be an interactive simulator that allows the user to:
 
 #define RUNFOEVA 1
 
-char* CMFS[] = { "Direct Mapping", "Fully Associative" };
+char* CMFS[] = { "Direct Mapping", "Set Associative" };
 char* OP[] = { "MISS", "HIT" };
 char* ROP[] = { "No Replacement", "Replacement" };
 
 int main(int argc, char *argv[])
 {
 
-  unsigned int addr_bits, num_blocks;
+  unsigned int num_blocks;
   unsigned int cmf;
   unsigned int hex_addr;
 	

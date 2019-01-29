@@ -29,7 +29,7 @@
 // --------------------------------
 unsigned int* phy_memory;
 unsigned int* block_location;
-
+unsigned int addr_bits;
 
 // --------------------------------
 // Prototype definitions
