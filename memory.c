@@ -66,11 +66,10 @@ int numberOfBlocks(unsigned int addr_bits, unsigned int num_block_offset_bits)
 {
   /* TODO: You complete code */
 
-
-
+  int val = pow(2, (addr_bits - num_block_offset_bits));
 
   // this is simply put here so the code complies, you must code correctly.
-  return 0; 
+  return val;
 } // end numberOfBlocks function
 
 
