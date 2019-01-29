@@ -44,18 +44,16 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
 {
   /* TODO: You complete */
 
+  int retVal = OK;
+
   switch (cmf) {
       case 1:
         // Direct Mapping
       case 2:
         // Set Associative
       default:
-        // Error
+        retVal = FAIL;
   }
-
-  // this is simply put here so the code complies, you must code correctly.
-  int retVal = OK;
-
 
   return retVal;
 
