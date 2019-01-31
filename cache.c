@@ -45,36 +45,58 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
   /* TODO: You complete */
 
   int retVal = OK;
+  unsigned int x=*hex_addr;
+  unsigned int tagPlaceDM=x>>(NUM_BLOCK_OFFSET_BITS+NUM_OF_LINE_BITS);
+  unsigned int lineNum=(x>>NUM_BLOCK_OFFSET_BITS)&((unsigned int)pow(2,NUM_OF_LINE_BITS)-1);
+
+  unsigned int tagPlaceSA = x >> (NUM_BLOCK_OFFSET_BITS + numberOfBlocks(addr_bits,NUM_BLOCK_OFFSET_BITS));
+  unsigned int blockNum = ( x >> NUM_BLOCK_OFFSET_BITS) & ((unsigned int) pow(2,numberOfBlocks(addr_bits,NUM_BLOCK_OFFSET_BITS))-1);
+
 
   switch (cmf) {
-      case DM:
-        // Direct Mapping
-        if (*found == 1) {
-          *replace = 0;
+      case DM:  // Direct Mapping
+        if (tagPlaceDM == cache[lineNum]->tag) {
+          cache[lineNum]->hit_count++;
+          *found=1;
+          *replace=0;
+          retVal = phy_memory[*hex_addr];
         }
         else {
-          *replace = 1;
+          cache[lineNum]->tag=tagPlaceDM;
+          cache[lineNum]->hit_count=0;
+          *found=0;
+          *replace=1;
+          retVal = phy_memory[*hex_addr];
         }
+        break;
+
+      // end case DM
+
+      case SA:    // Set Associative
+        /*if (tagPlaceSA == cache[lineNum]->tag) {
+          cache[lineNum]->hit_count++;
+          *found=1;
+          *replace=0;
+          retVal = phy_memory[*hex_addr];
+        }
+        else {
+          cache[lineNum]->tag=tagPlaceDM;
+          cache[lineNum]->hit_count=0;
+          *found=0;
+          *replace=1;
+          retVal = phy_memory[*hex_addr];
+        }*/
 
         retVal = phy_memory[*hex_addr];
         break;
-      case SA:
-        // Set Associative
-        if (*found == 1) {
-          *replace = 0;
-        }
-        else {
-          *replace = 1;
-        }
 
-        retVal = phy_memory[*hex_addr];
-        break;
+      //end case SA
+
       default:
         retVal = FAIL;
   }
 
   cprint();
-
   return retVal;
 
 } // end cread function
