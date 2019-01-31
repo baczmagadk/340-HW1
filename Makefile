@@ -2,7 +2,7 @@ CC=/usr/bin/cc
 CFLAGS=-c -Wall -g #-std=c11
 SRCS=memory.c cache.c hw1.c
 OBJS=memory.o cache.o hw1.o
-# MAKE SURE TO PUT YOUR NAME HERE
+# Daniel Baczmaga
 TARBALL=leclerc_hw1.tar.gz
 
 all: hw1
