@@ -64,7 +64,7 @@ unsigned int readMemoryFile(char* file_name) {
 
 int numberOfBlocks(unsigned int addr_bits, unsigned int num_block_offset_bits)
 {
-  /* TODO: You complete code */
+  /* TODO: Completed */
 
   int val = pow(2, (addr_bits - num_block_offset_bits));
 
