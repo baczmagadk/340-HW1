@@ -44,19 +44,36 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
 {
   /* TODO: You complete */
 
-  cprint();
   int retVal = OK;
 
   switch (cmf) {
       case DM:
         // Direct Mapping
+        if (*found == 1) {
+          *replace = 0;
+        }
+        else {
+          *replace = 1;
+        }
+
+        retVal = phy_memory[*hex_addr];
         break;
       case SA:
         // Set Associative
+        if (*found == 1) {
+          *replace = 0;
+        }
+        else {
+          *replace = 1;
+        }
+
+        retVal = phy_memory[*hex_addr];
         break;
       default:
         retVal = FAIL;
   }
+
+  cprint();
 
   return retVal;
 
