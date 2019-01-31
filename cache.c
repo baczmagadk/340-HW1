@@ -44,13 +44,14 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
 {
   /* TODO: You complete */
 
+  cprint();
   int retVal = OK;
 
   switch (cmf) {
-      case 1:
+      case DM:
         // Direct Mapping
         break;
-      case 2:
+      case SA:
         // Set Associative
         break;
       default:

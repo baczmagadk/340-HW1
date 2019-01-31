@@ -128,7 +128,6 @@ int main(int argc, char *argv[])
       printf("------------------------\n");
       printf("CMF is %s\n", CMFS[cmf-1]);
       printf("To exit simulation press the 'Ctrl C' keys on your keyboard\n");
-
       
       while (RUNFOEVA) {
 
