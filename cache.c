@@ -44,48 +44,43 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
 {
   /* TODO: You complete */
 
-  int retVal = OK;
+  int retVal=OK;
   unsigned int x=*hex_addr;
   unsigned int tagPlaceDM=x>>(NUM_BLOCK_OFFSET_BITS+NUM_OF_LINE_BITS);
   unsigned int lineNum=(x>>NUM_BLOCK_OFFSET_BITS)&((unsigned int)pow(2,NUM_OF_LINE_BITS)-1);
 
-  unsigned int tagPlaceSA = x >> (NUM_BLOCK_OFFSET_BITS + numberOfBlocks(addr_bits,NUM_BLOCK_OFFSET_BITS));
-  unsigned int blockNum = ( x >> NUM_BLOCK_OFFSET_BITS) & ((unsigned int) pow(2,numberOfBlocks(addr_bits,NUM_BLOCK_OFFSET_BITS))-1);
+  unsigned int tagPlaceSA=x>>(NUM_BLOCK_OFFSET_BITS+(addr_bits-(NUM_BLOCK_OFFSET_BITS+NUM_OF_TAG_BITS_SA)));
+  unsigned int setNum=(x>>NUM_BLOCK_OFFSET_BITS)&((unsigned int)pow(2,(addr_bits-(NUM_BLOCK_OFFSET_BITS+NUM_OF_TAG_BITS_SA)))-1);
+  int flag = -1;
 
 
   switch (cmf) {
       case DM:  // Direct Mapping
-        if (tagPlaceDM == cache[lineNum]->tag) {
+        if (tagPlaceDM==cache[lineNum]->tag) {
           cache[lineNum]->hit_count++;
           *found=1;
           *replace=0;
-          retVal = phy_memory[*hex_addr];
+          retVal=phy_memory[*hex_addr];
         }
         else {
           cache[lineNum]->tag=tagPlaceDM;
           cache[lineNum]->hit_count=0;
           *found=0;
           *replace=1;
-          retVal = phy_memory[*hex_addr];
+          retVal=phy_memory[*hex_addr];
         }
         break;
 
       // end case DM
 
       case SA:    // Set Associative
-        /*if (tagPlaceSA == cache[lineNum]->tag) {
-          cache[lineNum]->hit_count++;
-          *found=1;
-          *replace=0;
-          retVal = phy_memory[*hex_addr];
+        /* for (int x=0; x<2; x++) {
+          if (cache[setNum]->tag+x == -1) {
+            flag=x;
+          }
         }
-        else {
-          cache[lineNum]->tag=tagPlaceDM;
-          cache[lineNum]->hit_count=0;
-          *found=0;
-          *replace=1;
-          retVal = phy_memory[*hex_addr];
-        }*/
+        cache[setNum]->tag+flag=tagPlaceSA;
+        */
 
         retVal = phy_memory[*hex_addr];
         break;
