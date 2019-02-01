@@ -73,13 +73,6 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
 
       // end case DM
 
-      /*
-       * In set associative you get the set bits from which in the case of 00001100 would be the 1s.
-       * Then once you have the set that its going in to, you have to decide the line it will go into
-       * and in order to determine the line you have to check if either is empty and
-       * if neither line is empty then you have to replace the one with the lower hit count and do hit_count++
-       */
-
       case SA:    // Set Associative
         if (cache[line0OfSet]->tag==-1 && cache[line1OfSet]->tag==-1) { // if both tags are -1, set the first tag
           cache[line0OfSet]->tag=tagPlaceSA;
