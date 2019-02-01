@@ -47,24 +47,22 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
   int retVal=OK;
   unsigned int x=*hex_addr;
   unsigned int tagPlaceDM=x>>(NUM_BLOCK_OFFSET_BITS+NUM_OF_LINE_BITS);
-  unsigned int lineNum=(x>>NUM_BLOCK_OFFSET_BITS)&((unsigned int)pow(2,NUM_OF_LINE_BITS)-1);
+  unsigned int lineNumDM=(x>>NUM_BLOCK_OFFSET_BITS)&((unsigned int)pow(2,NUM_OF_LINE_BITS)-1);
 
   unsigned int tagPlaceSA=x>>(NUM_BLOCK_OFFSET_BITS+(addr_bits-(NUM_BLOCK_OFFSET_BITS+NUM_OF_TAG_BITS_SA)));
   unsigned int setNum=(x>>NUM_BLOCK_OFFSET_BITS)&((unsigned int)pow(2,(addr_bits-(NUM_BLOCK_OFFSET_BITS+NUM_OF_TAG_BITS_SA)))-1);
-  int flag = -1;
-
 
   switch (cmf) {
       case DM:  // Direct Mapping
-        if (tagPlaceDM==cache[lineNum]->tag) {
-          cache[lineNum]->hit_count++;
+        if (tagPlaceDM==cache[lineNumDM]->tag) {
+          cache[lineNumDM]->hit_count++;
           *found=1;
           *replace=0;
           retVal=phy_memory[*hex_addr];
         }
         else {
-          cache[lineNum]->tag=tagPlaceDM;
-          cache[lineNum]->hit_count=0;
+          cache[lineNumDM]->tag=tagPlaceDM;
+          cache[lineNumDM]->hit_count=0;
           *found=0;
           *replace=1;
           retVal=phy_memory[*hex_addr];
@@ -73,22 +71,53 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
 
       // end case DM
 
+      /*
+       * In set associative you get the set bits from which in the case of 00001100 would be the 1s.
+       * Then once you have the set that its going in to, you have to decide the line it will go into
+       * and in order to determine the line you have to check if either is empty and
+       * if neither line is empty then you have to replace the one with the lower hit count and do hit_count++
+       */
+
       case SA:    // Set Associative
-        /* for (int x=0; x<2; x++) {
-          if (cache[setNum]->tag+x == -1) {
-            flag=x;
-          }
+        if (cache[setNum]->tag==-1 && cache[setNum+1]->tag==-1) { // if both tags are -1, set the first tag
+          cache[setNum]->tag=tagPlaceSA;
+          *found=0;
+          *replace=1;
+          retVal=phy_memory[*hex_addr];
         }
-        cache[setNum]->tag+flag=tagPlaceSA;
-        */
-
-        retVal = phy_memory[*hex_addr];
+        else if (cache[setNum]->tag!=-1 && cache[setNum+1]->tag==-1) { // if the second tag is -1, set the second tag
+          cache[setNum+1]->tag=tagPlaceSA;
+          *found=0;
+          *replace=1;
+          retVal=phy_memory[*hex_addr];
+        }
+        else if (cache[setNum]->tag!=-1 && cache[setNum+1]->tag!=-1) { // if both tags are not equal to -1
+          if (cache[setNum]->hit_count < cache[setNum+1]->hit_count) { // if the second line's hit count is greater, increment hit on line 1
+            cache[setNum]->hit_count++;
+            *found=1;
+            *replace=0;
+            retVal=phy_memory[*hex_addr];
+          }
+          else if (cache[setNum]->hit_count > cache[setNum+1]->hit_count) { // if the first line's hit count is greater, increment hit on line 2
+            cache[setNum+1]->hit_count++;
+            *found=1;
+            *replace=0;
+            retVal=phy_memory[*hex_addr];
+          } else {  // else the both hit counts are the same, increment hit on line 1
+            cache[setNum]->hit_count++;
+            *found=1;
+            *replace=0;
+            retVal=phy_memory[*hex_addr];
+          }
+        } else {
+          retVal=phy_memory[*hex_addr];
+        }
         break;
-
       //end case SA
 
       default:
         retVal = FAIL;
+      // end switch statement
   }
 
   cprint();
