@@ -42,7 +42,7 @@ int initializeCache(unsigned int number_of_lines)
 int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
 	  unsigned int* replace)
 {
-  /* TODO: You complete */
+  /* TODO: Completed */
 
   int retVal=OK;
   unsigned int x=*hex_addr;
@@ -51,6 +51,8 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
 
   unsigned int tagPlaceSA=x>>(NUM_BLOCK_OFFSET_BITS+(addr_bits-(NUM_BLOCK_OFFSET_BITS+NUM_OF_TAG_BITS_SA)));
   unsigned int setNum=(x>>NUM_BLOCK_OFFSET_BITS)&((unsigned int)pow(2,(addr_bits-(NUM_BLOCK_OFFSET_BITS+NUM_OF_TAG_BITS_SA)))-1);
+  unsigned int line0OfSet=(((1+setNum)*2)-2);
+  unsigned int line1OfSet=(((1+setNum)*2)-1);
 
   switch (cmf) {
       case DM:  // Direct Mapping
@@ -79,32 +81,32 @@ int cread(unsigned int cmf, unsigned int* hex_addr, unsigned int* found,
        */
 
       case SA:    // Set Associative
-        if (cache[setNum]->tag==-1 && cache[setNum+1]->tag==-1) { // if both tags are -1, set the first tag
-          cache[setNum]->tag=tagPlaceSA;
+        if (cache[line0OfSet]->tag==-1 && cache[line1OfSet]->tag==-1) { // if both tags are -1, set the first tag
+          cache[line0OfSet]->tag=tagPlaceSA;
           *found=0;
           *replace=1;
           retVal=phy_memory[*hex_addr];
         }
-        else if (cache[setNum]->tag!=-1 && cache[setNum+1]->tag==-1) { // if the second tag is -1, set the second tag
-          cache[setNum+1]->tag=tagPlaceSA;
+        else if (cache[line0OfSet]->tag!=-1 && cache[line1OfSet]->tag==-1) { // if the second tag is -1, set the second tag
+          cache[line1OfSet]->tag=tagPlaceSA;
           *found=0;
           *replace=1;
           retVal=phy_memory[*hex_addr];
         }
-        else if (cache[setNum]->tag!=-1 && cache[setNum+1]->tag!=-1) { // if both tags are not equal to -1
-          if (cache[setNum]->hit_count < cache[setNum+1]->hit_count) { // if the second line's hit count is greater, increment hit on line 1
-            cache[setNum]->hit_count++;
+        else if (cache[line0OfSet]->tag!=-1 && cache[line1OfSet]->tag!=-1) { // if both tags are not equal to -1
+          if (cache[line0OfSet]->hit_count < cache[line1OfSet]->hit_count) { // if the second line's hit count is greater, increment hit on line 1
+            cache[line0OfSet]->hit_count++;
             *found=1;
             *replace=0;
             retVal=phy_memory[*hex_addr];
           }
-          else if (cache[setNum]->hit_count > cache[setNum+1]->hit_count) { // if the first line's hit count is greater, increment hit on line 2
-            cache[setNum+1]->hit_count++;
+          else if (cache[line0OfSet]->hit_count > cache[line1OfSet]->hit_count) { // if the first line's hit count is greater, increment hit on line 2
+            cache[line1OfSet]->hit_count++;
             *found=1;
             *replace=0;
             retVal=phy_memory[*hex_addr];
           } else {  // else the both hit counts are the same, increment hit on line 1
-            cache[setNum]->hit_count++;
+            cache[line0OfSet]->hit_count++;
             *found=1;
             *replace=0;
             retVal=phy_memory[*hex_addr];
